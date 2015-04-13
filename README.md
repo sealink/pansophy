@@ -1,5 +1,10 @@
 # Pansophy
 
+[![Gem Version](https://badge.fury.io/rb/pansophy.svg)](http://badge.fury.io/rb/pansophy)
+[![Build Status](https://travis-ci.org/sealink/pansophy.svg?branch=master)](https://travis-ci.org/sealink/pansophy)
+[![Coverage Status](https://coveralls.io/repos/sealink/pansophy/badge.svg)](https://coveralls.io/r/sealink/pansophy)
+[![Dependency Status](https://gemnasium.com/sealink/pansophy.svg)](https://gemnasium.com/sealink/pansophy)
+[![Code Climate](https://codeclimate.com/github/sealink/pansophy/badges/gpa.svg)](https://codeclimate.com/github/sealink/pansophy)
 
 Pansophy allows different applications to share knowledge via a centralised remote repository
 
