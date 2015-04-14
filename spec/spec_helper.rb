@@ -26,4 +26,15 @@ if ENV['COVERAGE']
     end
   end
 end
+
+RSpec.configure do |config|
+  config.before :each do
+    Fog.mock!
+    Fog::Mock.reset
+  end
+end
+
+require 'dotenv'
+Dotenv.load
+
 require 'pansophy'
