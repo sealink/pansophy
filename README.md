@@ -8,6 +8,8 @@
 
 Pansophy allows different applications to share knowledge via a centralised remote repository
 
+The current version only allows pulling a directory from an AWS S3 bucket
+
 ## Installation
 
 Add this line to your application's Gemfile:
@@ -26,7 +28,12 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+To pull a remote directory from an S3 bucket
+
+```ruby
+synchronizer = Pansophy::Synchronizer.new('bucket_name', 'remote_directory', 'local_directory')
+synchronizer.pull(overwrite: true) # Overwrites the local directory. Default false.
+```
 
 ## Development
 
