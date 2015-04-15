@@ -2,8 +2,9 @@ require 'fog'
 
 module Pansophy
   class Synchronizer
-    def initialize(remote_directory, local_directory)
-      @remote_directory = remote_directory
+    def initialize(bucket_name, remote_directory, local_directory)
+      @bucket_name      = bucket_name
+      @remote_directory = remote_directory.to_s
       @local_directory  = Pathname.new(local_directory)
       verify_local_directory!
     end
@@ -14,7 +15,8 @@ module Pansophy
       remove_target(options)
 
       source.files.each do |file|
-        file_path = @local_directory.join(file.key)
+        next if directory?(file)
+        file_path = @local_directory.join(destination_for(file))
         file_path.dirname.mkpath
         file_path.write(file.body)
       end
@@ -37,13 +39,22 @@ module Pansophy
       fail ArgumentError, "#{@local_directory} is not a directory"
     end
 
+    def destination_for(file)
+      return file.key if @remote_directory.empty?
+      file.key.sub(File.join(@remote_directory, '/'), '')
+    end
+
+    def directory?(file)
+      file.key.end_with?('/')
+    end
+
     def source
-      @source ||= connection.directories.get(@remote_directory)
+      @source ||= connection.directories.get(@bucket_name, prefix: @remote_directory)
     end
 
     def verify_source!
       return unless source.nil?
-      fail ArgumentError, "Could not find remote directory #{@remote_directory}"
+      fail ArgumentError, "Could not find bucket #{@bucket_name}"
     end
 
     def remove_target(options)

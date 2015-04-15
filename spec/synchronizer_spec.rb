@@ -13,20 +13,36 @@ describe Pansophy::Synchronizer do
   }
 
   context 'when pulling a remote directory' do
-    let(:remote_directory) { 'test_app/config' }
+    let(:bucket_name)       { 'test_app' }
+    let(:remote_directory)  { 'config' }
     subject(:local_directory) {
-      Pathname.new(__FILE__).dirname.expand_path.join('tmp/test')
+      Pathname.new(__FILE__).dirname.expand_path.join('tmp')
     }
     let(:file_name) { 'test.yml' }
     let(:file_body) { { test: true }.to_yaml }
+    let(:inner_file_1) { 'sub/inner1.txt' }
+    let(:inner_file_2) { 'sub/inner2.txt' }
+    let(:inner_file_1_body) { 'inner file 1' }
+    let(:inner_file_2_body) { 'inner file 2' }
 
     let(:synchronizer) {
-      Pansophy::Synchronizer.new(remote_directory, local_directory.to_s)
+      Pansophy::Synchronizer.new(bucket_name, remote_directory, local_directory.to_s)
     }
 
     before do
-      directory = connection.directories.create(key: remote_directory)
-      directory.files.create(key: file_name, body: file_body)
+      connection.put_bucket(bucket_name)
+      connection.put_object(bucket_name, File.join(remote_directory, '/'), '')
+      connection.put_object(bucket_name, File.join(remote_directory, file_name), file_body)
+      connection.put_object(
+        bucket_name,
+        File.join(remote_directory, inner_file_1),
+        inner_file_1_body
+      )
+      connection.put_object(
+        bucket_name,
+        File.join(remote_directory, inner_file_2),
+        inner_file_2_body
+      )
     end
 
     before do
@@ -47,6 +63,12 @@ describe Pansophy::Synchronizer do
       end
       specify do
         expect(subject.join(file_name).read).to eq file_body
+      end
+      specify do
+        expect(subject.join(inner_file_1).read).to eq inner_file_1_body
+      end
+      specify do
+        expect(subject.join(inner_file_2).read).to eq inner_file_2_body
       end
     end
 
