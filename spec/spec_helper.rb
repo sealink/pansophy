@@ -35,6 +35,6 @@ RSpec.configure do |config|
 end
 
 require 'dotenv'
-Dotenv.load
+Dotenv.load(Pathname.new(__FILE__).expand_path.dirname.join('.env.test'))
 
 require 'pansophy'
