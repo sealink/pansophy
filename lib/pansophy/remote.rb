@@ -11,7 +11,7 @@ module Pansophy
     end
 
     def files
-      directory.files.select { |file| !directory?(file) }.map { |file| File.new(file) }
+      remote_files.map { |file| File.new(file, @directory_name) }
     end
 
     private
@@ -20,6 +20,10 @@ module Pansophy
       Pansophy.connection.directories.get(@bucket_name, prefix: @directory_name)
     end
     memoize :directory
+
+    def remote_files
+      directory.files.select { |file| !directory?(file) }
+    end
 
     def directory?(file)
       file.key.end_with?('/')
@@ -33,8 +37,9 @@ module Pansophy
     class File
       include Adamantium::Flat
 
-      def initialize(file)
-        @file = file
+      def initialize(file, relative_directory = nil)
+        @file      = file
+        @directory = relative_directory
       end
 
       def body
@@ -44,11 +49,13 @@ module Pansophy
       def path
         Pathname.new(@file.key)
       end
+      memoize :path
 
-      def relative_to(path)
-        return self.path if path.to_s.empty?
-        Pathname.new(self.path.to_s.sub(::File.join(path.to_s, '/'), ''))
+      def relative_path
+        return self.path if @directory.to_s.empty?
+        path.sub(::File.join(@directory.to_s, '/'), '')
       end
+      memoize :relative_path
     end
   end
 end

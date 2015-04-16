@@ -8,7 +8,7 @@ module Pansophy
     def pull(options = {})
       @local.create(options)
       @remote.files.each do |file|
-        file_path = @local.directory.join(file.relative_to(@remote.directory_name))
+        file_path = @local.directory.join(file.relative_path)
         file_path.dirname.mkpath
         File.open(file_path, 'w') do |f|
           f.write file.body
