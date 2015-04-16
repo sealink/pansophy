@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-require 'pansophy/synchronizer'
+require 'pansophy'
 
 describe Pansophy::Synchronizer do
   let(:connection) {

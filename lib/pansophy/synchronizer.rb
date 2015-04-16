@@ -1,5 +1,3 @@
-require 'fog'
-
 module Pansophy
   class Synchronizer
     def initialize(bucket_name, remote_directory, local_directory)
@@ -26,16 +24,6 @@ module Pansophy
 
     private
 
-    def connection
-      @connection ||=
-        Fog::Storage.new(
-          provider:              'AWS',
-          aws_access_key_id:     ENV['AWS_ACCESS_KEY_ID'],
-          aws_secret_access_key: ENV['AWS_SECRET_ACCESS_KEY'],
-          region:                ENV['AWS_REGION']
-        )
-    end
-
     def verify_local_directory!
       return if @local_directory.directory? || !@local_directory.exist?
       fail ArgumentError, "#{@local_directory} is not a directory"
@@ -51,7 +39,7 @@ module Pansophy
     end
 
     def source
-      @source ||= connection.directories.get(@bucket_name, prefix: @remote_directory)
+      @source ||= Pansophy.connection.directories.get(@bucket_name, prefix: @remote_directory)
     end
 
     def verify_source!
