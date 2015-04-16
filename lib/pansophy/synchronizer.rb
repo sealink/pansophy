@@ -18,7 +18,9 @@ module Pansophy
         next if directory?(file)
         file_path = @local_directory.join(destination_for(file))
         file_path.dirname.mkpath
-        file_path.write(file.body)
+        File.open(file_path, 'w') do |f|
+          f.write file.body
+        end
       end
     end
 
