@@ -2,7 +2,7 @@ require 'pansophy/version'
 
 module Pansophy
   def self.connection
-    Connection.instance.aws
+    @connection ||= Connection.aws
   end
 
   def self.pull(bucket_name, remote_directory, local_directory, options = {})

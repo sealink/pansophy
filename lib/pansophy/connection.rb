@@ -1,9 +1,6 @@
 module Pansophy
-  class Connection
-    include Singleton
-    include Adamantium
-
-    def aws
+  module Connection
+    def self.aws
       Fog::Storage.new(
         provider:              'AWS',
         aws_access_key_id:     ENV['AWS_ACCESS_KEY_ID'],
@@ -11,6 +8,5 @@ module Pansophy
         region:                ENV['AWS_REGION']
       )
     end
-    memoize :aws
   end
 end
