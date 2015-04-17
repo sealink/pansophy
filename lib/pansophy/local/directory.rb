@@ -8,32 +8,32 @@ module Pansophy
         verify_directory!
       end
 
-      def directory
+      def pathname
         Pathname.new(@path)
       end
-      memoize :directory
+      memoize :pathname
 
       def create(options)
         remove(options)
-        directory.mkpath
+        pathname.mkpath
       end
 
       private
 
       def verify_directory!
-        return if directory.directory? || !directory.exist?
-        fail ArgumentError, "#{directory} is not a directory"
+        return if pathname.directory? || !pathname.exist?
+        fail ArgumentError, "#{pathname} is not a directory"
       end
 
       def remove(options)
-        return unless directory.exist?
+        return unless pathname.exist?
         prevent_overwrite! unless options[:overwrite]
-        directory.rmtree
+        pathname.rmtree
       end
 
       def prevent_overwrite!
         fail ArgumentError,
-             "#{directory} already exists, pass ':overwrite => true' to overwrite"
+             "#{pathname} already exists, pass ':overwrite => true' to overwrite"
       end
     end
   end
