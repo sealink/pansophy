@@ -1,8 +1,8 @@
 module Pansophy
   class Synchronizer
     def initialize(bucket_name, remote_directory, local_directory)
-      @remote = Remote.new(bucket_name, remote_directory)
-      @local  = Local.new(local_directory)
+      @remote = Remote::Directory.new(bucket_name, remote_directory)
+      @local  = Local::Directory.new(local_directory)
     end
 
     def pull(options = {})
