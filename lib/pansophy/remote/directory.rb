@@ -3,8 +3,6 @@ module Pansophy
     class Directory
       include Adamantium::Flat
 
-      attr_reader :path
-
       def initialize(bucket_name, path = nil)
         @bucket_name = bucket_name
         @path        = path.to_s
