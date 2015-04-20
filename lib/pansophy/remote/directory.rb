@@ -9,6 +9,11 @@ module Pansophy
         verify_bucket!
       end
 
+      def pathname
+        Pathname.new(@path)
+      end
+      memoize :pathname
+
       def files
         remote_files.map { |file| File.new(file, @path) }
       end

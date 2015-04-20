@@ -12,16 +12,10 @@ module Pansophy
         @file.body
       end
 
-      def path
+      def pathname
         Pathname.new(@file.key)
       end
-      memoize :path
-
-      def relative_path
-        return self.path if @directory.to_s.empty?
-        path.sub(::File.join(@directory.to_s, '/'), '')
-      end
-      memoize :relative_path
+      memoize :pathname
     end
   end
 end

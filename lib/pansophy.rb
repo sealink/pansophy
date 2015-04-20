@@ -14,6 +14,7 @@ require 'fog'
 require 'singleton'
 require 'adamantium'
 
+require 'pansophy/helpers'
 require 'pansophy/connection'
 require 'pansophy/remote'
 require 'pansophy/local'
