@@ -18,6 +18,10 @@ module Pansophy
         pathname.mkpath
       end
 
+      def create_file(path, body, options = {})
+        Local::File.new(pathname.join(path), body).create(options)
+      end
+
       private
 
       def verify_directory!

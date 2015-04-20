@@ -6,10 +6,16 @@ module Pansophy
     end
 
     def pull(options = {})
-      @local_dir.create(options)
-      @remote_dir.files.each do |file|
-        file_path = Helpers::PathBuilder.new(file, @remote_dir, @local_dir).destination_path
-        Local::File.new(file_path, file.body).create
+      synchronize(@remote_dir, @local_dir, options)
+    end
+
+    private
+
+    def synchronize(source_dir, destination_dir, options)
+      destination_dir.create(options)
+      source_dir.files.each do |file|
+        file_path = Helpers::PathBuilder.new(file, source_dir).relative_path
+        destination_dir.create_file(file_path, file.body, options)
       end
     end
   end
