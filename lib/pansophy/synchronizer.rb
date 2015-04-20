@@ -9,10 +9,7 @@ module Pansophy
       @local.create(options)
       @remote.files.each do |file|
         file_path = @local.pathname.join(file.relative_path)
-        file_path.dirname.mkpath
-        File.open(file_path, 'w') do |f|
-          f.write file.body
-        end
+        Local::File.new(file_path, file.body).create
       end
     end
   end
