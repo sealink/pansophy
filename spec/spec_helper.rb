@@ -1,6 +1,6 @@
 $LOAD_PATH.unshift File.expand_path('../../lib', __FILE__)
 
-MINIMUM_COVERAGE = 99
+MINIMUM_COVERAGE = 98
 
 if ENV['COVERAGE']
   require 'simplecov'

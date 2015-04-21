@@ -190,6 +190,48 @@ describe Pansophy::Synchronizer do
         it_behaves_like 'a synchronised remote folder'
       end
     end
+  end
 
+  context 'when using the module level interface' do
+    let(:synchronizer_class) { double(new: synchronizer) }
+    let(:synchronizer) { double }
+
+    before do
+      stub_const 'Pansophy::Synchronizer', synchronizer_class
+    end
+
+    context 'when pulling' do
+      before do
+        allow(synchronizer).to receive(:pull)
+        Pansophy.pull('bucket_name', 'remote_directory', 'local_directory', overwrite: true)
+      end
+
+      specify do
+        expect(synchronizer_class)
+          .to have_received(:new)
+                .with('bucket_name', 'remote_directory', 'local_directory')
+      end
+
+      specify do
+        expect(synchronizer).to have_received(:pull).with(overwrite: true)
+      end
+    end
+
+    context 'when pushing' do
+      before do
+        allow(synchronizer).to receive(:push)
+        Pansophy.push('bucket_name', 'remote_directory', 'local_directory', overwrite: true)
+      end
+
+      specify do
+        expect(synchronizer_class)
+          .to have_received(:new)
+                .with('bucket_name', 'remote_directory', 'local_directory')
+      end
+
+      specify do
+        expect(synchronizer).to have_received(:push).with(overwrite: true)
+      end
+    end
   end
 end
