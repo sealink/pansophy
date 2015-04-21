@@ -3,9 +3,8 @@ module Pansophy
     class File
       include Adamantium::Flat
 
-      def initialize(file, relative_directory = nil)
-        @file      = file
-        @directory = relative_directory
+      def initialize(file)
+        @file = file
       end
 
       def body

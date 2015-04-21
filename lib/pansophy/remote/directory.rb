@@ -15,7 +15,7 @@ module Pansophy
       memoize :pathname
 
       def files
-        remote_files.map { |file| File.new(file, @path) }
+        remote_files.map { |file| File.new(file) }
       end
 
       private
