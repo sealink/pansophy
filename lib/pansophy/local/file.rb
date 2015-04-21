@@ -3,28 +3,17 @@ module Pansophy
     class File
       include Adamantium::Flat
 
-      attr_reader :pathname, :body
+      attr_reader :pathname
 
-      def initialize(path, body)
+      def initialize(path)
         @pathname = Pathname.new(path)
-        @body     = body
       end
 
-      def create(options = {})
-        prevent_overwrite! unless options[:overwrite]
-        @pathname.dirname.mkpath
-        ::File.open(@pathname, 'w') do |f|
-          f.write @body
-        end
+      def body
+        return nil unless @pathname.exist?
+        ::File.read(@pathname)
       end
-
-      private
-
-      def prevent_overwrite!
-        return unless @pathname.exist?
-        fail ArgumentError,
-             "#{@pathname} already exists, pass ':overwrite => true' to overwrite"
-      end
+      memoize :body
     end
   end
 end
