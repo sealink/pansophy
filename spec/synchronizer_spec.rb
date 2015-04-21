@@ -148,6 +148,13 @@ describe Pansophy::Synchronizer do
       end
     end
 
+    context 'when the bucket does not exist' do
+      specify {
+        expect { synchronizer.push }
+          .to raise_exception ArgumentError, "Could not find bucket #{bucket_name}"
+      }
+    end
+
     context 'when the bucket exists' do
       before do
         create_bucket
