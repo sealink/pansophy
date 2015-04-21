@@ -9,6 +9,10 @@ module Pansophy
       synchronize(@remote_dir, @local_dir, options)
     end
 
+    def push(options = {})
+      synchronize(@local_dir, @remote_dir, options)
+    end
+
     private
 
     def synchronize(source_dir, destination_dir, options)

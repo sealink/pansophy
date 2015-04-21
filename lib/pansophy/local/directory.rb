@@ -13,6 +13,10 @@ module Pansophy
       end
       memoize :pathname
 
+      def files
+        entries.select(&:file?).map { |file| File.new(file) }
+      end
+
       def create(options)
         remove(options)
         pathname.mkpath
@@ -23,6 +27,11 @@ module Pansophy
       end
 
       private
+
+      def entries
+        Dir[pathname.join('**/*')].map { |entry| Pathname.new(entry) }
+      end
+      memoize :entries
 
       def verify_directory!
         return if pathname.directory? || !pathname.exist?
