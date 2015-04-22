@@ -207,9 +207,8 @@ describe Pansophy::Synchronizer do
       end
 
       specify do
-        expect(synchronizer_class)
-          .to have_received(:new)
-                .with('bucket_name', 'remote_directory', 'local_directory')
+        expect(synchronizer_class).to have_received(:new)
+          .with('bucket_name', 'remote_directory', 'local_directory')
       end
 
       specify do
@@ -224,9 +223,8 @@ describe Pansophy::Synchronizer do
       end
 
       specify do
-        expect(synchronizer_class)
-          .to have_received(:new)
-                .with('bucket_name', 'remote_directory', 'local_directory')
+        expect(synchronizer_class).to have_received(:new)
+          .with('bucket_name', 'remote_directory', 'local_directory')
       end
 
       specify do
