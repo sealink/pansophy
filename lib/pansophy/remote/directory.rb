@@ -6,7 +6,6 @@ module Pansophy
       def initialize(bucket_name, path = nil)
         @bucket_name = bucket_name
         @path        = path.to_s
-        verify_bucket!
       end
 
       def pathname
@@ -30,7 +29,7 @@ module Pansophy
       private
 
       def directory
-        Pansophy.connection.directories.get(@bucket_name, prefix: @path)
+        ReadDirectory.new(@bucket_name, @path).call
       end
       memoize :directory
 
@@ -44,11 +43,6 @@ module Pansophy
 
       def directory?(file)
         file.key.end_with?('/')
-      end
-
-      def verify_bucket!
-        return unless directory.nil?
-        fail ArgumentError, "Could not find bucket #{@bucket_name}"
       end
 
       def remote_entry

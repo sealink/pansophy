@@ -27,7 +27,7 @@ module Pansophy
       end
 
       def directory
-        Pansophy.connection.directories.get(@bucket, prefix: @pathname.to_s)
+        ReadDirectory.new(@bucket, @pathname).call
       end
       memoize :directory
     end
