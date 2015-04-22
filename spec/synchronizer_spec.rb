@@ -52,6 +52,10 @@ describe Pansophy::Synchronizer do
     connection.put_object(bucket_name, remote_directory.join(path).to_s, body)
   end
 
+  def get_remote_file(path)
+    connection.get_object(bucket_name, remote_directory.join(path).to_s)
+  end
+
   context 'when pulling a remote directory' do
     before do
       create_bucket
@@ -131,10 +135,6 @@ describe Pansophy::Synchronizer do
     let(:remote_file) { get_remote_file(file_name) }
     let(:remote_inner_file_1) { get_remote_file(inner_file_1) }
     let(:remote_inner_file_2) { get_remote_file(inner_file_2) }
-
-    def get_remote_file(path)
-      connection.get_object(bucket_name, remote_directory.join(path).to_s)
-    end
 
     shared_examples 'a synchronised remote folder' do
       specify do
@@ -229,6 +229,55 @@ describe Pansophy::Synchronizer do
 
       specify do
         expect(synchronizer).to have_received(:push).with(overwrite: true)
+      end
+    end
+  end
+
+  describe Pansophy::Remote::CreateFile do
+    let(:path) { 'created_files/test.txt' }
+    let(:full_path) { remote_directory.join(path) }
+    let(:body) { 'Content' }
+    let(:create_file) { Pansophy::Remote::CreateFile.new(bucket_name, full_path, body) }
+
+    before do
+      create_bucket
+      create_remote_directory
+    end
+
+    context 'when creating a file' do
+      let(:created_file) { get_remote_file(path) }
+
+      before do
+        create_file.call
+      end
+
+      specify do
+        expect(created_file.body).to eq body
+      end
+
+      context 'when the file already exists' do
+        let(:new_body) { 'New content' }
+        let(:new_create_file) { Pansophy::Remote::CreateFile.new(bucket_name, full_path, new_body) }
+
+        context 'without passing the overwrite option' do
+          let(:expected_error_message) {
+            "#{full_path} already exists, pass ':overwrite => true' to overwrite"
+          }
+
+          specify do
+            expect { new_create_file.call }.to raise_error ArgumentError, expected_error_message
+          end
+        end
+
+        context 'passing the overwrite option' do
+          before do
+            new_create_file.call(overwrite: true)
+          end
+
+          specify do
+            expect(created_file.body).to eq new_body
+          end
+        end
       end
     end
   end

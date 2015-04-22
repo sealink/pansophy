@@ -3,21 +3,21 @@ module Pansophy
     class CreateFile
       include Adamantium::Flat
 
-      def initialize(directory, path, body)
-        @directory = directory
-        @pathname  = Pathname.new(path)
-        @body      = body
+      def initialize(bucket, path, body)
+        @bucket   = bucket
+        @pathname = Pathname.new(path)
+        @body     = body
       end
 
       def call(options = {})
         prevent_overwrite! unless options[:overwrite]
-        @directory.files.create(key: @pathname.to_s, body: @body.dup)
+        directory.files.create(key: @pathname.to_s, body: @body.dup)
       end
 
       private
 
       def exist?
-        @directory.files.any? { |file| file.key == @pathname.to_s }
+        directory.files.any? { |file| file.key == @pathname.to_s }
       end
 
       def prevent_overwrite!
@@ -25,6 +25,11 @@ module Pansophy
         fail ArgumentError,
              "#{@pathname} already exists, pass ':overwrite => true' to overwrite"
       end
+
+      def directory
+        Pansophy.connection.directories.get(@bucket, prefix: @pathname.to_s)
+      end
+      memoize :directory
     end
   end
 end

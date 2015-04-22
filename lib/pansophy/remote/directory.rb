@@ -24,7 +24,7 @@ module Pansophy
       end
 
       def create_file(path, body, options = {})
-        CreateFile.new(directory, pathname.join(path), body).call(options)
+        CreateFile.new(@bucket_name, pathname.join(path), body).call(options)
       end
 
       private
