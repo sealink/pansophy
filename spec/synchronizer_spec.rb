@@ -14,9 +14,8 @@ describe Pansophy::Synchronizer do
 
   let(:bucket_name) { 'test_app' }
   let(:remote_directory) { Pathname.new('config') }
-  let(:local_directory) {
-    Pathname.new(__FILE__).dirname.expand_path.join('tmp')
-  }
+  let(:local_directory_name) { 'tmp' }
+  let(:local_directory) { Pathname.new(__FILE__).dirname.expand_path.join(local_directory_name) }
   let(:file_name) { 'test.yml' }
   let(:file_body) { { test: true }.to_yaml }
   let(:inner_file_1) { 'sub/inner1.txt' }
@@ -111,6 +110,23 @@ describe Pansophy::Synchronizer do
         end
         it_behaves_like 'a synchronised local folder'
       end
+    end
+
+    context 'when the local directory already exists as a file' do
+      let(:local_directory_name) { 'tmp/test' }
+      let(:body) { 'TEST' }
+
+      before do
+        local_directory.dirname.mkpath
+        ::File.open(local_directory, 'w') do |f|
+          f.write body
+        end
+      end
+
+      specify {
+        expect { synchronizer.pull }
+          .to raise_exception ArgumentError, "#{local_directory} is not a directory"
+      }
     end
   end
 
@@ -229,6 +245,57 @@ describe Pansophy::Synchronizer do
 
       specify do
         expect(synchronizer).to have_received(:push).with(overwrite: true)
+      end
+    end
+  end
+
+  describe Pansophy::Local::CreateFile do
+    let(:folder) {
+      Pathname.new(__FILE__).dirname.expand_path.join('tmp')
+    }
+    let(:path) { local_directory.join(file_name) }
+    let(:create_file) { Pansophy::Local::CreateFile.new(path, file_body) }
+
+    specify do
+      expect(path).not_to exist
+    end
+
+    context 'when creating a file' do
+      before do
+        create_file.call
+      end
+
+      specify do
+        expect(path).to exist
+      end
+
+      specify do
+        expect(path.read).to eq file_body
+      end
+
+      context 'when the file already exists' do
+        let(:new_file_body) { 'New content' }
+        let(:new_create_file) { Pansophy::Local::CreateFile.new(path, new_file_body) }
+
+        context 'without passing the overwrite option' do
+          let(:expected_error_message) {
+            "#{path} already exists, pass ':overwrite => true' to overwrite"
+          }
+
+          specify do
+            expect { new_create_file.call }.to raise_error ArgumentError, expected_error_message
+          end
+        end
+
+        context 'passing the overwrite option' do
+          before do
+            new_create_file.call(overwrite: true)
+          end
+
+          specify do
+            expect(path.read).to eq new_file_body
+          end
+        end
       end
     end
   end
