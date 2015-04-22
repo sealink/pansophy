@@ -1,31 +1,26 @@
 module Pansophy
   class Synchronizer
     def initialize(bucket_name, remote_directory, local_directory)
-      @remote = Remote.new(bucket_name, remote_directory)
-      @local  = Local.new(local_directory)
+      @remote_dir = Remote::Directory.new(bucket_name, remote_directory)
+      @local_dir  = Local::Directory.new(local_directory)
     end
 
     def pull(options = {})
-      remove_target(options)
+      synchronize(@remote_dir, @local_dir, options)
+    end
 
-      @remote.files.each do |file|
-        file_path = @local.directory.join(file.relative_to(@remote.directory_name))
-        file_path.dirname.mkpath
-        File.open(file_path, 'w') do |f|
-          f.write file.body
-        end
-      end
+    def push(options = {})
+      synchronize(@local_dir, @remote_dir, options)
     end
 
     private
 
-    def remove_target(options)
-      return unless @local.directory.exist?
-      unless options[:overwrite]
-        fail ArgumentError,
-             "#{@local.directory} already exists, pass ':overwrite => true' to overwrite"
+    def synchronize(source_dir, destination_dir, options)
+      destination_dir.create(options)
+      source_dir.files.each do |file|
+        file_path = Helpers::PathBuilder.new(file, source_dir).relative_path
+        destination_dir.create_file(file_path, file.body, options)
       end
-      @local.directory.rmtree
     end
   end
 end
