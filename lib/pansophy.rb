@@ -12,6 +12,10 @@ module Pansophy
   def self.push(bucket_name, remote_directory, local_directory, options = {})
     Synchronizer.new(bucket_name, remote_directory, local_directory).push(options)
   end
+
+  def self.read(bucket_name, path)
+    Remote::ReadFile.new(bucket_name, path).call
+  end
 end
 
 require 'fog'
