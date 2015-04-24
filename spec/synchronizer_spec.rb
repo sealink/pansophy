@@ -16,6 +16,7 @@ describe Pansophy::Synchronizer do
   let(:remote_directory) { Pathname.new('config') }
   let(:local_directory_name) { 'tmp' }
   let(:local_directory) { Pathname.new(__FILE__).dirname.expand_path.join(local_directory_name) }
+  let(:local_file) { 'wat.txt' }
   let(:file_name) { 'test.yml' }
   let(:file_body) { { test: true }.to_yaml }
   let(:inner_file_1) { 'sub/inner1.txt' }
@@ -51,11 +52,17 @@ describe Pansophy::Synchronizer do
     connection.put_object(bucket_name, remote_directory.join(path).to_s, body)
   end
 
+  def create_local_file(file, content)
+    path = local_directory.join(file)
+    path.dirname.mkpath
+    ::File.write(path, content)
+  end
+
   def get_remote_file(path)
     connection.get_object(bucket_name, remote_directory.join(path).to_s)
   end
 
-  context 'when pulling a remote directory' do
+  context 'when pulling/merging a remote directory' do
     before do
       create_bucket
       create_remote_directory
@@ -117,16 +124,58 @@ describe Pansophy::Synchronizer do
       let(:body) { 'TEST' }
 
       before do
-        local_directory.dirname.mkpath
-        ::File.open(local_directory, 'w') do |f|
-          f.write body
-        end
+        create_local_file(local_directory, body)
       end
 
       specify {
         expect { synchronizer.pull }
           .to raise_exception ArgumentError, "#{local_directory} is not a directory"
       }
+    end
+
+    context 'when merging a remote directory' do
+      before do
+        create_local_file(local_file, 'some great content')
+      end
+
+      context 'it should not re-create the local directory' do
+        before do
+          synchronizer.merge(overwrite: true)
+        end
+
+        specify {
+          expect(Pathname.new local_directory.join(local_file)).to exist
+        }
+      end
+
+      context 'when files to be merged are already present' do
+        before do
+          create_local_file(inner_file_1, 'some amazing content')
+        end
+
+        context 'and the overwrite option is passed' do
+          before do
+            synchronizer.merge(overwrite: true)
+          end
+
+          specify {
+            expect(local_directory.join(inner_file_1).read)
+              .to eq get_remote_file(inner_file_1).body
+          }
+        end
+
+        context 'and the overwrite option not passed' do
+          let(:expected_error_message) {
+            "#{local_directory.join(inner_file_1)} already exists, " \
+              "pass ':overwrite => true' to overwrite"
+          }
+
+          specify {
+            expect  { synchronizer.merge }
+              .to raise_exception ArgumentError, expected_error_message
+          }
+        end
+      end
     end
   end
 
@@ -140,11 +189,7 @@ describe Pansophy::Synchronizer do
     }
     before do
       files.each do |path, body|
-        full_path = local_directory.join(path)
-        full_path.dirname.mkpath
-        ::File.open(full_path, 'w') do |f|
-          f.write body
-        end
+        create_local_file(path, body)
       end
     end
 
@@ -229,6 +274,22 @@ describe Pansophy::Synchronizer do
 
       specify do
         expect(synchronizer).to have_received(:pull).with(overwrite: true)
+      end
+    end
+
+    context 'when merging' do
+      before do
+        allow(synchronizer).to receive(:merge)
+        Pansophy.merge('bucket_name', 'remote_directory', 'local_directory', overwrite: true)
+      end
+
+      specify do
+        expect(synchronizer_class).to have_received(:new)
+          .with('bucket_name', 'remote_directory', 'local_directory')
+      end
+
+      specify do
+        expect(synchronizer).to have_received(:merge).with(overwrite: true)
       end
     end
 

@@ -13,10 +13,14 @@ module Pansophy
       synchronize(@local_dir, @remote_dir, options)
     end
 
+    def merge(options = {})
+      synchronize(@remote_dir, @local_dir, options.merge(merge: true))
+    end
+
     private
 
     def synchronize(source_dir, destination_dir, options)
-      destination_dir.create(options)
+      destination_dir.create(options) unless options[:merge]
       source_dir.files.each do |file|
         file_path = Helpers::PathBuilder.new(file, source_dir).relative_path
         destination_dir.create_file(file_path, file.body, options)

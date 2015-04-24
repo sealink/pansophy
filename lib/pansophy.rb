@@ -9,6 +9,10 @@ module Pansophy
     Synchronizer.new(bucket_name, remote_directory, local_directory).pull(options)
   end
 
+  def self.merge(bucket_name, remote_directory, local_directory, options = {})
+    Synchronizer.new(bucket_name, remote_directory, local_directory).merge(options)
+  end
+
   def self.push(bucket_name, remote_directory, local_directory, options = {})
     Synchronizer.new(bucket_name, remote_directory, local_directory).push(options)
   end
