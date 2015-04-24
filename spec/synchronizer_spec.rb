@@ -16,6 +16,7 @@ describe Pansophy::Synchronizer do
   let(:remote_directory) { Pathname.new('config') }
   let(:local_directory_name) { 'tmp' }
   let(:local_directory) { Pathname.new(__FILE__).dirname.expand_path.join(local_directory_name) }
+  let(:local_file) { local_directory.join('wat.txt') }
   let(:file_name) { 'test.yml' }
   let(:file_body) { { test: true }.to_yaml }
   let(:inner_file_1) { 'sub/inner1.txt' }
@@ -49,6 +50,10 @@ describe Pansophy::Synchronizer do
 
   def create_remote_file(path, body)
     connection.put_object(bucket_name, remote_directory.join(path).to_s, body)
+  end
+
+  def create_local_file
+    `touch #{local_file}`
   end
 
   def get_remote_file(path)
@@ -126,6 +131,26 @@ describe Pansophy::Synchronizer do
       specify {
         expect { synchronizer.pull }
           .to raise_exception ArgumentError, "#{local_directory} is not a directory"
+      }
+    end
+  end
+
+  context 'when merging a remote directory' do
+    before do
+      create_bucket
+      create_remote_directory
+      create_remote_file(file_name, file_body)
+      create_remote_file(inner_file_1, inner_file_1_body)
+      create_remote_file(inner_file_2, inner_file_2_body)
+
+      local_directory.mkpath
+      create_local_file
+      synchronizer.merge(overwrite: true)
+    end
+
+    context 'it should not re-create the local directory' do
+      specify {
+        expect(File.exist? local_file).to eq true
       }
     end
   end
@@ -229,6 +254,22 @@ describe Pansophy::Synchronizer do
 
       specify do
         expect(synchronizer).to have_received(:pull).with(overwrite: true)
+      end
+    end
+
+    context 'when merging' do
+      before do
+        allow(synchronizer).to receive(:merge)
+        Pansophy.merge('bucket_name', 'remote_directory', 'local_directory', overwrite: true)
+      end
+
+      specify do
+        expect(synchronizer_class).to have_received(:new)
+          .with('bucket_name', 'remote_directory', 'local_directory')
+      end
+
+      specify do
+        expect(synchronizer).to have_received(:merge).with(overwrite: true)
       end
     end
 
