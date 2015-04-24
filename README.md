@@ -8,7 +8,11 @@
 
 Pansophy allows different applications to share knowledge via a centralised remote repository
 
-The current version only allows pulling a directory from an AWS S3 bucket
+The current version only works wit AWS S3 buckets and allows:
+  * pulling a remote directory to a local directory
+  * merging a remote directory with a local directory
+  * pushing a local directory to a remote directory
+  * reading the contents of a remote file
 
 ## Installation
 
@@ -28,11 +32,28 @@ Or install it yourself as:
 
 ## Usage
 
-To pull a remote directory from an S3 bucket
-
+To pull a remote directory to a local directory
 ```ruby
-synchronizer = Pansophy::Synchronizer.new('bucket_name', 'remote_directory', 'local_directory')
-synchronizer.pull(overwrite: true) # Overwrites the local directory. Default false.
+# Pass overwrite: true to entirely replace the local directory.
+Pansophy.pull('bucket_name', 'remote_directory', 'local_directory', overwrite: true)
+```
+
+To merge a remote directory with a local directory
+```ruby
+# Pass overwrite: true to entirely replace the remote directory.
+Pansophy.merge('bucket_name', 'remote_directory', 'local_directory', overwrite: true)
+```
+
+To push a local directory to a remote directory
+```ruby
+# Pass overwrite: true to overwrite local files with remote files.
+# Local files without a corresponding remote file remain untouched.
+Pansophy.push('bucket_name', 'remote_directory', 'local_directory', overwrite: true)
+```
+
+To read the contents of a remote file
+```ruby
+Pansophy.read('bucket_name', 'remote_file_path')
 ```
 
 ## Development
