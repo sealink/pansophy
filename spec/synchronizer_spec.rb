@@ -148,7 +148,7 @@ describe Pansophy::Synchronizer do
         end
 
         specify {
-          expect(::File.exist? local_directory.join(local_file)).to eq true
+          expect(Pathname.new local_directory.join(local_file)).to exist
         }
       end
 
