@@ -53,9 +53,9 @@ describe Pansophy::Synchronizer do
   end
 
   def create_local_file(file, content)
-    File.open(local_directory.join(file), 'w') do |f|
-      f.write content
-    end
+    path = local_directory.join(file)
+    path.dirname.mkpath
+    ::File.write(path, content)
   end
 
   def get_remote_file(path)
@@ -124,10 +124,7 @@ describe Pansophy::Synchronizer do
       let(:body) { 'TEST' }
 
       before do
-        local_directory.dirname.mkpath
-        ::File.open(local_directory, 'w') do |f|
-          f.write body
-        end
+        create_local_file(local_directory, body)
       end
 
       specify {
@@ -138,7 +135,6 @@ describe Pansophy::Synchronizer do
 
     context 'when merging a remote directory' do
       before do
-        local_directory.mkpath
         create_local_file(local_file, 'some great content')
       end
 
@@ -154,7 +150,6 @@ describe Pansophy::Synchronizer do
 
       context 'when files to be merged are already present' do
         before do
-          local_directory.join('sub').mkpath
           create_local_file(inner_file_1, 'some amazing content')
         end
 
@@ -164,14 +159,15 @@ describe Pansophy::Synchronizer do
           end
 
           specify {
-            expect(::File.open(local_directory.join(inner_file_1)).read)
-              .not_to eq 'some amazing content'
+            expect(local_directory.join(inner_file_1).read)
+              .to eq get_remote_file(inner_file_1).body
           }
         end
 
         context 'and the overwrite option not passed' do
           let(:expected_error_message) {
-            "#{local_directory.join(inner_file_1)} already exists, pass ':overwrite => true' to overwrite"
+            "#{local_directory.join(inner_file_1)} already exists, " \
+              "pass ':overwrite => true' to overwrite"
           }
 
           specify {
@@ -179,7 +175,6 @@ describe Pansophy::Synchronizer do
               .to raise_exception ArgumentError, expected_error_message
           }
         end
-
       end
     end
   end
@@ -194,11 +189,7 @@ describe Pansophy::Synchronizer do
     }
     before do
       files.each do |path, body|
-        full_path = local_directory.join(path)
-        full_path.dirname.mkpath
-        ::File.open(full_path, 'w') do |f|
-          f.write body
-        end
+        create_local_file(path, body)
       end
     end
 
