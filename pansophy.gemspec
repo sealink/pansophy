@@ -23,6 +23,7 @@ Gem::Specification.new do |spec|
 
   spec.add_dependency 'fog'
   spec.add_dependency 'adamantium'
+  spec.add_dependency 'facets'
 
   spec.add_development_dependency 'bundler'
   spec.add_development_dependency 'rake'
