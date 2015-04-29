@@ -5,7 +5,7 @@ module Pansophy
   class ConfigSynchronizer
     attr_accessor :config_bucket_name, :config_remote_folder, :config_local_folder, :version
 
-    def pull
+    def merge
       puts "Fetching remote configuration (version #{VERSION})"
       verify_config_bucket_name!
       Pansophy.merge(config_bucket_name, remote_path, local_path, overwrite: true)
