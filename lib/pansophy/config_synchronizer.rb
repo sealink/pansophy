@@ -3,7 +3,7 @@ require 'facets/kernel/blank'
 
 module Pansophy
   class ConfigSynchronizer
-    attr_accessor :config_bucket_name, :config_remote_folder, :config_local_folder, :version
+    attr_writer :config_bucket_name, :config_remote_folder, :config_local_folder, :version
 
     def merge
       puts "Fetching remote configuration (version #{VERSION})"
@@ -11,8 +11,6 @@ module Pansophy
       Pansophy.merge(config_bucket_name, remote_path, local_path, overwrite: true)
       puts 'done'
     end
-
-    private
 
     def config_bucket_name
       @config_bucket_name ||= ENV['CONFIG_BUCKET_NAME']
@@ -29,6 +27,8 @@ module Pansophy
     def version
       @version ||= (ENV['CONFIG_VERSION'] || '1.0')
     end
+
+    private
 
     def remote_path
       Pathname.new(config_remote_folder).join(version.to_s).to_s

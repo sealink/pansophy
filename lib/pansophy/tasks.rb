@@ -4,6 +4,9 @@ namespace :config do
     require 'pansophy/config_synchronizer'
     require 'dotenv'
     Dotenv.load
-    Pansophy::ConfigSynchronizer.new.merge
+    synchronizer = Pansophy::ConfigSynchronizer.new
+    puts "Fetching remote configuration (version #{synchronizer.version})"
+    synchronizer.merge
+    puts done
   end
 end
