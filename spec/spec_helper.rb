@@ -2,7 +2,7 @@ $LOAD_PATH.unshift File.expand_path('../../lib', __FILE__)
 
 MINIMUM_COVERAGE = 100
 
-if ENV['COVERAGE']
+unless ENV['COVERAGE'] == 'off'
   require 'simplecov'
   require 'simplecov-rcov'
   require 'coveralls'
