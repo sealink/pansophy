@@ -4,6 +4,6 @@ namespace :config do
     require 'pansophy/config_synchronizer'
     require 'dotenv'
     Dotenv.load
-    Pansophy::ConfigSynchronizer.new.pull
+    Pansophy::ConfigSynchronizer.new.merge
   end
 end
