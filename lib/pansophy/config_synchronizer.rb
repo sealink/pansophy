@@ -23,7 +23,7 @@ module Pansophy
     end
 
     def config_local_folder
-      @config_local_folder ||= (ENV['CONFIG_LOCAL_FOLDER'] || RootPathFinder.find || 'config')
+      @config_local_folder ||= (ENV['CONFIG_LOCAL_FOLDER'] || ConfigPath.find!)
     end
 
     def version
@@ -39,13 +39,19 @@ module Pansophy
     end
 
     def verify_config_bucket_name!
-      fail ArgumentError, "CONFIG_BUCKET_NAME is undefined" if config_bucket_name.blank?
+      return unless config_bucket_name.blank?
+      fail ConfigSynchronizerError, 'CONFIG_BUCKET_NAME is undefined'
     end
   end
 
-  class RootPathFinder
-    def self.find
+  class ConfigPath
+    def self.find!
+      # TODO: Extract this in a Rails specific gem
       return Rails.root.join('config') if defined?(Rails)
+      fail ConfigSynchronizerError, 'Could not determine location of config folder'
     end
+  end
+
+  class ConfigSynchronizerError < StandardError
   end
 end
