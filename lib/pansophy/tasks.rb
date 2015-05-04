@@ -6,7 +6,7 @@ namespace :pansophy do
       synchronizer = Pansophy::ConfigSynchronizer.new
       puts "Fetching remote configuration (version #{synchronizer.version})"
       synchronizer.merge
-      puts done
+      puts "Done"
     end
   end
 end
