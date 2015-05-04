@@ -48,7 +48,15 @@ module Pansophy
     def self.find!
       # TODO: Extract this in a Rails specific gem
       return Rails.root.join('config') if defined?(Rails)
+      return sinatra_root_pathname.join('config') if defined?(Sinatra::Application)
+
       fail ConfigSynchronizerError, 'Could not determine location of config folder'
+    end
+
+    private
+
+    def self.sinatra_root_pathname
+      Pathname.new(Sinatra::Application.settings.root)
     end
   end
 
