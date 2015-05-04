@@ -110,31 +110,44 @@ describe Pansophy::ConfigSynchronizer do
     end
   end
 
-  context 'when rails is defined' do
-    let(:rails) { double(root: Pathname.new('rails/root')) }
-
+  context 'when only the bucket name is specified' do
     before do
-      stub_const('Rails', rails)
+      config_synchronizer.config_bucket_name = 'bucket'
     end
 
-    context 'when only the bucket name is specified' do
+    context 'when merging the remote config directory and using rails' do
+      let(:rails) { double(root: Pathname.new('rails/root')) }
+
       before do
-        config_synchronizer.config_bucket_name = 'bucket'
+        stub_const('Rails', rails)
+        config_synchronizer.merge
       end
 
-      context 'when merging the remote config directory' do
-        before do
-          config_synchronizer.merge
-        end
+      it 'should use rails config folder as the local folder' do
+        expect(Pansophy).to have_received(:merge).with(
+          'bucket',
+          'config/1.0',
+          'rails/root/config',
+          overwrite: true
+        )
+      end
+    end
 
-        it 'should use rails config folder as the local folder' do
-          expect(Pansophy).to have_received(:merge).with(
-            'bucket',
-            'config/1.0',
-            'rails/root/config',
-            overwrite: true
-          )
-        end
+    context 'when merging the remote config directory and using sinatra' do
+      let(:sinatra) { double(settings: double(root: 'sinatra/root')) }
+
+      before do
+        stub_const('Sinatra::Application', sinatra)
+        config_synchronizer.merge
+      end
+
+      it 'should use the sinatra config folder as the local folder' do
+        expect(Pansophy).to have_received(:merge).with(
+          'bucket',
+          'config/1.0',
+          'sinatra/root/config',
+          overwrite: true
+        )
       end
     end
   end
