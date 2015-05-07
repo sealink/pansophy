@@ -22,7 +22,7 @@ module Pansophy
   end
 end
 
-require 'fog'
+require 'fog/aws'
 require 'singleton'
 require 'adamantium'
 
