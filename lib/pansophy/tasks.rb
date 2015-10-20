@@ -4,6 +4,7 @@ namespace :pansophy do
     task :synchronize do
       require 'pansophy/config_synchronizer'
       synchronizer = Pansophy::ConfigSynchronizer.new
+      puts "Pansophy version #{Pansophy::VERSION}"
       puts "Fetching remote configuration (version #{synchronizer.version})"
       synchronizer.merge
       puts "Done"

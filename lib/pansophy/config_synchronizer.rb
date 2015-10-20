@@ -6,10 +6,8 @@ module Pansophy
     attr_writer :config_bucket_name, :config_remote_folder, :config_local_folder, :version
 
     def merge
-      puts "Fetching remote configuration (version #{VERSION})"
       verify_config_bucket_name!
       Pansophy.merge(config_bucket_name, remote_path, local_path, overwrite: true)
-      puts 'done'
     end
 
     def config_bucket_name
