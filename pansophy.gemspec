@@ -25,6 +25,10 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'adamantium'
   spec.add_dependency 'facets'
 
+  if RUBY_VERSION < '2.0.0'
+    spec.add_dependency 'net-ssh', '>= 2.1', '< 3.0'
+  end
+
   spec.add_development_dependency 'bundler'
   spec.add_development_dependency 'rake'
   spec.add_development_dependency 'dotenv'
