@@ -15,7 +15,7 @@ module Pansophy
     end
 
     def config_remote_folder
-      @config_remote_folder ||= (ENV['CONFIG_REMOTE_FOLDER'] || 'config')
+      @config_remote_folder ||= ENV.fetch('CONFIG_REMOTE_FOLDER', 'config')
     end
 
     def config_local_folder
@@ -23,7 +23,7 @@ module Pansophy
     end
 
     def version
-      @version ||= (ENV['CONFIG_VERSION'] || '1.0')
+      @version ||= ENV.fetch('CONFIG_VERSION', '1.0')
     end
 
     private
