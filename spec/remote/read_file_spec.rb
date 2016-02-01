@@ -2,7 +2,7 @@ require 'spec_helper'
 
 require 'pansophy'
 
-describe Pansophy::Remote::ReadFile do
+describe 'Reading a remote file' do
   let(:connection) {
     Fog::Storage.new(
       provider:              'AWS',
@@ -35,6 +35,25 @@ describe Pansophy::Remote::ReadFile do
       context 'when using the module level interface' do
         specify do
           expect(Pansophy.read(bucket_name, path)).to eq body
+        end
+      end
+
+      context 'when reading the file head' do
+        shared_examples 'a file head' do
+          specify { expect(file_head.key).to eq path }
+          specify { expect(file_head.content_length).to eq body.length }
+          specify { expect(file_head.content_type).to be_nil }
+          specify { expect(file_head.etag).to match /\h{32}$/ }
+          specify { expect(file_head.last_modified).to be_within(1).of Time.now }
+        end
+
+        let(:read_file_head) { Pansophy::Remote::ReadFileHead.new(bucket_name, path) }
+        subject(:file_head) { read_file_head.call }
+        it_behaves_like 'a file head'
+
+        context 'when using the module level interface' do
+          subject(:file_head) { Pansophy.head(bucket_name, path) }
+          it_behaves_like 'a file head'
         end
       end
     end

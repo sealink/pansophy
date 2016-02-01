@@ -21,21 +21,20 @@ Gem::Specification.new do |spec|
   spec.executables   = spec.files.grep(%r{^exe/}) { |f| File.basename(f) }
   spec.require_paths = ['lib']
 
-  spec.add_dependency 'fog-aws'
-  spec.add_dependency 'adamantium'
-  spec.add_dependency 'facets'
+  spec.required_ruby_version = '>= 2.1'
 
-  if RUBY_VERSION < '2.0.0'
-    spec.add_dependency 'net-ssh', '>= 2.1', '< 3.0'
-  end
+  spec.add_dependency 'fog-aws', '~> 0.8'
+  spec.add_dependency 'anima', '~> 0.3'
+  spec.add_dependency 'adamantium', '~> 0.2'
+  spec.add_dependency 'facets', '~> 3.0'
 
-  spec.add_development_dependency 'bundler'
-  spec.add_development_dependency 'rake'
-  spec.add_development_dependency 'dotenv'
-  spec.add_development_dependency 'rspec'
-  spec.add_development_dependency 'simplecov'
-  spec.add_development_dependency 'simplecov-rcov'
-  spec.add_development_dependency 'coveralls'
-  spec.add_development_dependency 'rubocop'
-  spec.add_development_dependency 'travis'
+  spec.add_development_dependency 'bundler', '~> 1.11'
+  spec.add_development_dependency 'rake', '~> 10.0'
+  spec.add_development_dependency 'dotenv', '~> 2.0'
+  spec.add_development_dependency 'rspec', '~> 3.4'
+  spec.add_development_dependency 'simplecov', '~> 0.11'
+  spec.add_development_dependency 'simplecov-rcov', '~> 0.2'
+  spec.add_development_dependency 'coveralls', '~> 0.8'
+  spec.add_development_dependency 'rubocop', '~> 0.36'
+  spec.add_development_dependency 'travis', '~> 1.8'
 end
