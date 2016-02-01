@@ -20,6 +20,10 @@ module Pansophy
   def self.read(bucket_name, path)
     Remote::ReadFile.new(bucket_name, path).call
   end
+
+  def self.head(bucket_name, path)
+    Remote::ReadFileHead.new(bucket_name, path).call
+  end
 end
 
 require 'fog/aws'
