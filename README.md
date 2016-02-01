@@ -56,6 +56,11 @@ To read the contents of a remote file
 Pansophy.read('bucket_name', 'remote_file_path')
 ```
 
+To read the head of a remote file
+```ruby
+Pansophy.head('bucket_name', 'remote_file_path')
+```
+
 ## Development
 
 After checking out the repo, run `bin/setup` to install dependencies. Then, run `bin/console` for an interactive prompt that will allow you to experiment.
