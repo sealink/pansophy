@@ -17,8 +17,12 @@ module Pansophy
     Synchronizer.new(bucket_name, remote_directory, local_directory).push(options)
   end
 
+  def self.fetch(bucket_name, path)
+    Remote::FetchFile.new(bucket_name, path).call
+  end
+
   def self.read(bucket_name, path)
-    Remote::ReadFile.new(bucket_name, path).call
+    Remote::ReadFileBody.new(bucket_name, path).call
   end
 
   def self.head(bucket_name, path)

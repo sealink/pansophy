@@ -1,6 +1,6 @@
 module Pansophy
   module Remote
-    class ReadFile
+    class ReadFileBody
       include Adamantium::Flat
 
       def initialize(bucket, path)
@@ -9,21 +9,15 @@ module Pansophy
       end
 
       def call
-        fail ArgumentError, "#{@pathname} does not exist" if file.nil?
         file.body
       end
 
       private
 
       def file
-        directory.files.find { |file| file.key == @pathname.to_s }
+        FetchFile.new(@bucket, @pathname).call
       end
       memoize :file
-
-      def directory
-        ReadDirectory.new(@bucket, @pathname).call
-      end
-      memoize :directory
     end
   end
 end
