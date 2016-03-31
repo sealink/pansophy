@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.5.1
+
+* Adds missing mime-types dependency for fog-aws 0.9
+
 ## 0.5.0
 
 * Autoload tasks for rakefile
