@@ -23,7 +23,8 @@ Gem::Specification.new do |spec|
 
   spec.required_ruby_version = '>= 2.1'
 
-  spec.add_dependency 'fog-aws', '~> 0.8'
+  spec.add_dependency 'fog-aws', '~> 0.9'
+  spec.add_dependency 'mime-types', '~> 3.0'
   spec.add_dependency 'anima', '~> 0.3'
   spec.add_dependency 'adamantium', '~> 0.2'
   spec.add_dependency 'facets', '~> 3.0'

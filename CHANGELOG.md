@@ -1,18 +1,24 @@
-# Changelog
+# Change Log
 
-## 0.5.0
+## [0.5.1]
+### Fixed
+- Adds missing mime-types dependency for fog-aws 0.9
 
-* Autoload tasks for rakefile
+## [0.5.0]
+### Changed
+- Autoload tasks for rakefile
 
-## 0.4.0
+## [0.4.0]
+### Added
+- File Fetching
 
-* File Fetching
+## [0.3.0]
+### Added
+- Reading file head
 
-## 0.3.0
+### Changed
+- Require ruby 2.1+
 
-* Reading file head
-* Require ruby 2.1+
-
-## 0.2.6
-
-* Compatibility with ruby 1.9
+## [0.2.6]
+### Added
+- Compatibility with ruby 1.9
