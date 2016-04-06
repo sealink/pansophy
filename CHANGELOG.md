@@ -1,5 +1,9 @@
 # Change Log
 
+## [0.5.2]
+### Fixed
+- Removes strict version dependency for mime-types
+
 ## [0.5.1]
 ### Fixed
 - Adds missing mime-types dependency for fog-aws 0.9
