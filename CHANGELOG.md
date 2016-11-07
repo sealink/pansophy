@@ -1,5 +1,9 @@
 # Change Log
 
+## [0.5.3]
+### Changed
+- Use coverage kit to enforce maximum coverage
+
 ## [0.5.2]
 ### Fixed
 - Removes strict version dependency for mime-types
