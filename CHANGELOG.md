@@ -1,6 +1,6 @@
 # Change Log
 
-## [0.5.3]
+## [Unreleased]
 ### Changed
 - Use coverage kit to enforce maximum coverage
 
