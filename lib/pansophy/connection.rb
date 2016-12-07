@@ -1,6 +1,7 @@
 module Pansophy
   module Connection
     def self.aws
+      Excon.defaults[:ciphers] = 'DEFAULT'
       Fog::Storage.new(
         provider:              'AWS',
         aws_access_key_id:     ENV['AWS_ACCESS_KEY_ID'],
