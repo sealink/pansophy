@@ -1,8 +1,11 @@
 # Change Log
 
 ## [Unreleased]
+
+## [0.5.3]
 ### Changed
 - Use coverage kit to enforce maximum coverage
+### Fixed
 - [TT-1616] Reset Excon cipher list to the default which fixes connection issue from JRuby
 
 ## [0.5.2]
