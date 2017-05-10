@@ -11,7 +11,9 @@ module Pansophy
       def call(options = {})
         prevent_overwrite! unless options[:overwrite]
         @pathname.dirname.mkpath
-        ::File.write(@pathname, @body)
+        ::File.open(@pathname, 'wb') do |f|
+          f.write @body
+        end
       end
 
       private

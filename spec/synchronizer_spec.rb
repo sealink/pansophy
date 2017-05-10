@@ -18,7 +18,7 @@ describe Pansophy::Synchronizer do
   let(:local_directory) { Pathname.new(__FILE__).dirname.expand_path.join(local_directory_name) }
   let(:local_file) { 'wat.txt' }
   let(:file_name) { 'test.yml' }
-  let(:file_body) { { test: true }.to_yaml }
+  let(:file_body) { { test: true, message: '用' }.to_yaml }
   let(:inner_file_1) { 'sub/inner1.txt' }
   let(:inner_file_2) { 'sub/inner2.txt' }
   let(:inner_file_1_body) { 'inner file 1' }
@@ -319,6 +319,18 @@ describe Pansophy::Synchronizer do
 
     specify do
       expect(path).not_to exist
+    end
+
+    context 'when creating a file with default internal encoding set to utf-8' do
+      let(:file_body) { '用'.force_encoding('ASCII-8BIT') }
+      before do
+        Encoding.default_internal = Encoding::UTF_8
+        create_file.call
+      end
+
+      it 'should save the file correctly, and be readable as utf-8' do
+        expect(path.read).to eq file_body.force_encoding('UTF-8')
+      end
     end
 
     context 'when creating a file' do
