@@ -2,6 +2,9 @@
 
 ## [Unreleased]
 
+### Changed
+- Update dependency for aws-s3 to latest version
+
 ## [0.5.4]
 ### Fixed
 - Fix issue when writing files that contain unicode characters
