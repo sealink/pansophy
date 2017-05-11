@@ -8,7 +8,7 @@
 
 Pansophy allows different applications to share knowledge via a centralised remote repository
 
-The current version only works wit AWS S3 buckets and allows:
+The current version only works with AWS S3 buckets and allows:
   * pulling a remote directory to a local directory
   * merging a remote directory with a local directory
   * pushing a local directory to a remote directory

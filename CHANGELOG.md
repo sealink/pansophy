@@ -2,6 +2,7 @@
 
 ## [Unreleased]
 
+## [0.5.4]
 ### Fixed
 - Fix issue when writing files that contain unicode characters
 
