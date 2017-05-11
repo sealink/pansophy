@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+## [0.5.5]
+### Fixed
+- Remove overly strict dependencies
+
 ## [0.5.4]
 ### Fixed
 - Fix issue when writing files that contain unicode characters
