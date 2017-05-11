@@ -10,7 +10,7 @@ Gem::Specification.new do |spec|
   spec.email         = ['berardialessandro@gmail.com']
 
   spec.summary       = 'Information sharing via centralised repository'
-  spec.description   = 'Pansophy allows different applications to share knowledge' \
+  spec.description   = 'Pansophy allows different applications to share knowledge ' \
                        'via a centralised remote repository'
   spec.homepage      = 'https://github.com/sealink/pansophy'
   spec.license       = 'MIT'
@@ -23,7 +23,7 @@ Gem::Specification.new do |spec|
 
   spec.required_ruby_version = '>= 2.1'
 
-  spec.add_dependency 'fog-aws', '~> 0.9'
+  spec.add_dependency 'fog-aws', '~> 1.3'
   spec.add_dependency 'mime-types'
   spec.add_dependency 'anima', '~> 0.3'
   spec.add_dependency 'adamantium', '~> 0.2'
