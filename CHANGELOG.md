@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+## [0.5.6]
+### Changed
+- Allow specifying file attributes when creating files
+
 ## [0.5.5]
 ### Fixed
 - Remove overly strict dependencies
