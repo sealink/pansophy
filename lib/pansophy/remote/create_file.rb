@@ -29,8 +29,8 @@ module Pansophy
 
       def call(options = {})
         prevent_overwrite! unless options[:overwrite]
-        params = options.slice(*ALLOWED_ATTRS).merge(key: @pathname.to_s, body: @body.dup)
-        directory.files.create(params)
+        file_attributes = options.delete_if { |k,v| !ALLOWED_ATTRS.include?(k) }
+        directory.files.create(file_attributes.merge(key: @pathname.to_s, body: @body.dup))
       end
 
       private
