@@ -1,3 +1,5 @@
+require 'facets/hash/slice'
+
 module Pansophy
   module Remote
     class CreateFile
@@ -29,7 +31,7 @@ module Pansophy
 
       def call(options = {})
         prevent_overwrite! unless options[:overwrite]
-        file_attributes = options.delete_if { |k,v| !ALLOWED_ATTRS.include?(k) }
+        file_attributes = options.slice(*ALLOWED_ATTRS)
         directory.files.create(file_attributes.merge(key: @pathname.to_s, body: @body.dup))
       end
 
