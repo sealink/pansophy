@@ -1,6 +1,8 @@
 # Change Log
 
 ## [Unreleased]
+
+## [0.5.6]
 ### Changed
 - Allow specifying file attributes when creating files
 
