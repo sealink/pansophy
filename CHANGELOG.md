@@ -1,6 +1,6 @@
 # Change Log
 
-## [Unreleased]
+## [0.6.0]
 ### Added
 - [DO-90] Support using EC2 profile when fetching configuration files
 
