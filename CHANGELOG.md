@@ -1,5 +1,9 @@
 # Change Log
 
+## [1.0.0] Unreleased
+### Added
+- [DO-228] Upgrade the AWS Fog dependency
+
 ## [0.6.0]
 ### Added
 - [DO-90] Support using EC2 profile when fetching configuration files
