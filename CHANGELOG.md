@@ -1,6 +1,6 @@
 # Change Log
 
-## [1.0.0] Unreleased
+## [1.0.0]
 ### Added
 - [DO-228] Upgrade the AWS Fog dependency
 
