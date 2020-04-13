@@ -1,5 +1,3 @@
-require 'facets/hash/slice'
-
 module Pansophy
   module Remote
     class CreateFile
