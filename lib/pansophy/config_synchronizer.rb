@@ -1,5 +1,4 @@
 require 'pansophy'
-require 'facets/kernel/blank'
 
 module Pansophy
   class ConfigSynchronizer
@@ -37,7 +36,7 @@ module Pansophy
     end
 
     def verify_config_bucket_name!
-      return unless config_bucket_name.blank?
+      return unless config_bucket_name.nil? || config_bucket_name.empty?
       fail ConfigSynchronizerError, 'CONFIG_BUCKET_NAME is undefined'
     end
   end
