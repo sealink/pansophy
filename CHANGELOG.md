@@ -1,5 +1,9 @@
 # Change Log
 
+## [1.1.0]
+### Removed
+- [TT-7135] Remove the Anima dependency
+
 ## [1.0.0]
 ### Added
 - [DO-228] Upgrade the AWS Fog dependency
