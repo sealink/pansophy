@@ -1,5 +1,9 @@
 # Change Log
 
+## Unreleased
+
+- [TT-8614] Update to build with github actions / ruby 3.0 / rails 6.1
+
 ## [1.1.0]
 ### Removed
 - [TT-7135] Remove the Anima dependency
