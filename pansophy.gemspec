@@ -23,7 +23,7 @@ Gem::Specification.new do |spec|
 
   spec.required_ruby_version = '>= 2.6'
 
-  spec.add_dependency 'fog-aws', '~> 2.0'
+  spec.add_dependency 'fog-aws', '>= 2', '< 4'
   spec.add_dependency 'mime-types'
   spec.add_dependency 'adamantium'
 
