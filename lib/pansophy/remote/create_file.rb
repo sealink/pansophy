@@ -5,7 +5,6 @@ module Pansophy
     class CreateFile
       include Adamantium::Flat
 
-
       def initialize(bucket, path, body)
         @bucket   = bucket
         @pathname = Pathname.new(path)

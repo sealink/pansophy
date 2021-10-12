@@ -40,4 +40,3 @@ require 'pansophy/remote'
 require 'pansophy/local'
 require 'pansophy/synchronizer'
 require 'pansophy/config_synchronizer'
-require 'pansophy/railtie' if defined?(Rails)
