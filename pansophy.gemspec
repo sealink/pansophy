@@ -21,8 +21,6 @@ Gem::Specification.new do |spec|
   spec.executables   = spec.files.grep(%r{^exe/}) { |f| File.basename(f) }
   spec.require_paths = ['lib']
 
-  spec.required_ruby_version = '>= 2.1'
-
   spec.add_dependency 'fog-aws', '~> 0.13'
   spec.add_dependency 'mime-types'
   spec.add_dependency 'anima'
