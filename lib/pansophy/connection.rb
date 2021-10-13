@@ -22,7 +22,7 @@ module Pansophy
     end
 
     def self.iam_profile_fog
-      Fog::Storage.new provider: 'AWS', use_iam_profile: true
+      Fog::Storage.new provider: 'AWS', use_iam_profile: true, region: ENV['AWS_REGION']
     end
   end
 end
