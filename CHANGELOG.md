@@ -1,6 +1,8 @@
 # Change Log
 
-## Unreleased
+## [1.3.0]
+
+### Changed
 
 - [TT-8614] Update to build with github actions / ruby 3.0 / rails 6.1
 - [PLAT-1175] Update ruby build to 3.2
